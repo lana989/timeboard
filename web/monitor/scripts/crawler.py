@@ -31,4 +31,17 @@ def run():
     Monitor(img_url=img_url, title=title, landing_url=landing_url).save()
     
   except Exception as e:
-    pass
+    response = requests.get("https://www.naver.com/")
+    soup = BeautifulSoup(response.text, "html.parser")
+    url = soup.select_one('#da_iframe_time').get('data-iframe-src')
+
+    page_source = requests.get(url).text
+    soup2 = BeautifulSoup(page_source, "html.parser")
+    matched = re.search('var info = (.+)",', page_source, re.S)
+    info_list = list(matched.group(0).split('"'))
+
+    img_url = info_list[-4]
+    title = info_list[7]
+    landing_url = info_list[9]
+
+    Monitor(img_url=img_url, title=title, landing_url=landing_url).save()
