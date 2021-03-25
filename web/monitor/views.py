@@ -5,7 +5,7 @@ from .serializers import MonitorSerializers
 
 # Create your views here.
 def index(requests):
-	monitors = Monitor.objects.all()
+	monitors = Monitor.objects.all().order_by("-created_at")
 	return render(requests, "index.html", {"monitors": monitors})
 
 class MonitorViewSet(viewsets.ModelViewSet):
