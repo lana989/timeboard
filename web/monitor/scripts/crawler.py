@@ -6,6 +6,9 @@ from monitor.models import Monitor
 
 
 def run():
+  row, _ = Monitor.objects.filter(created_at__lte=datetime.now() -
+                                 timedelta(days=1)).delete()
+
   try: 
     response = requests.get("https://www.naver.com/")
     soup = BeautifulSoup(response.text, "html.parser")
